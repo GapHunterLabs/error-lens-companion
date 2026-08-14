@@ -16,10 +16,14 @@
 - Long diagnostic messages are truncated with an ellipsis instead of
   running off-screen.
 
-### Known limitations
+### Verified
 
-- Real on-screen rendering (`ErrorLensInlayRenderer.paint`) has not had
-  a live visual pass yet -- see README.md "Known limitations".
+- Live-tested 2026-08-14 in a real `runIde` sandbox: real inline hints
+  confirmed rendering correctly for JSON syntax errors and real Java
+  diagnostics (unresolved symbol, unused import/method/variable, syntax
+  error) -- readable, correctly positioned. Confirmed one-hint-per-line
+  holds against real `HighlightInfo` data, not just unit-test DTOs.
+  0 bugs found. See README.md "Live verification".
 
 [Unreleased]: https://github.com/GapHunterLabs/error-lens-companion/compare/0.1.0...HEAD
 [0.1.0]: https://github.com/GapHunterLabs/error-lens-companion/commits/0.1.0

@@ -1,0 +1,7 @@
+{
+  "name": "sample",
+  "version": "1.0.0",
+  "trailingCommaError": "this line has a trailing comma below",
+  "list": [1, 2, 3,],
+  "missingCloseBrace": "the file is missing its final closing brace"
+
