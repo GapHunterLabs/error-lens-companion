@@ -1,0 +1,26 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>dev.gaphunter.errorlenscompanion</id>
+    <name>Error Lens Companion</name>
+    <vendor>Gap Hunter Labs</vendor>
+    <description><![CDATA[
+        <p>Shows errors and warnings inline, at the end of the line that
+        has them, instead of only as a gutter icon or squiggly underline
+        you have to hover to read. Ports the "Error Lens" concept (VS
+        Code's Error Lens extension: 10M+ installs) into the IDE's own
+        highlighting pipeline -- it reads the diagnostics the IDE already
+        computed, it never re-analyzes anything itself.</p>
+        <p>Reads only already-finished <code>HighlightInfo</code> results
+        from a pass registered to run after the IDE's own general
+        highlighting pass -- no duplicate analysis, no network call, no
+        telemetry. One hint per line (the most severe diagnostic wins),
+        so it never turns into unreadable clutter on a line with several
+        problems.</p>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <highlightingPassFactory implementation="dev.gaphunter.errorlenscompanion.highlight.ErrorLensPassFactory"/>
+    </extensions>
+</idea-plugin>
