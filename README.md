@@ -45,17 +45,21 @@ documented-exception discipline this follows.
   surfaces inline).
 - **100% local** -- no network call, no account, no telemetry.
 
-## Known limitations
+## Live verification (2026-08-14)
 
-This is the plugin in this session's batch with the least live
-verification. Everything up through "an inlay gets created at the right
-offset with the right text" is covered by real, passing tests against a
-real `Editor`/`InlayModel` (see `ErrorLensInlayManagerTest`) -- but the
-actual on-screen pixels (`ErrorLensInlayRenderer.paint`: exact vertical
-alignment, color against every theme, font fallback for the icon
-glyphs ✖ ⚠ ℹ) have not been looked at yet. If those glyphs don't render
-cleanly in every font, that's the first thing to check by hand before
-calling this Marketplace-ready.
+Confirmed in a real `runIde` sandbox, not just automated tests: real
+inline hints render correctly at the end of the line for JSON syntax
+errors (no SDK needed) and for real Java diagnostics (unresolved
+symbol, unused import, unused method, unused local variable, syntax
+error) once a JDK was available -- readable, correctly positioned, icon
++ message both legible against the default dark theme. Also confirmed
+live that a line with TWO unresolved symbols on it still shows exactly
+ONE inline hint, not two overlapping ones (`LineDiagnosticSelector`
+working as designed against real `HighlightInfo` data, not just the
+synthetic DTOs the unit tests use). Not yet checked: light themes,
+fonts other than the default, and very long lines/messages under real
+word-wrap settings -- worth a look before broad release, but the core
+mechanism this was built around is no longer a guess.
 
 ## Usage
 
