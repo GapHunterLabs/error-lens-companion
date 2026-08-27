@@ -12,8 +12,8 @@ Ports the "Error Lens" concept -- VS Code's Error Lens extension has
 into the IDE's own highlighting pipeline. Confirmed before building this
 that no equivalent already exists in JetBrains Marketplace. Same
 "port a proven concept, no equivalent exists yet" bet as the other 6
-plugins built this same session -- see `CONSTITUTION.md` §1 for the
-documented-exception discipline this follows.
+plugins built this same session -- the same documented-exception
+discipline this follows.
 
 ## Why built this way
 
