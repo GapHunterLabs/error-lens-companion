@@ -24,6 +24,13 @@ discipline this follows.
   computed, through `DaemonCodeAnalyzerEx.processHighlights`. It never
   triggers, duplicates, or slows down any actual code analysis --
   structurally, it cannot be the reason your inspections get slower.
+- **Refreshed once highlighting has finished.** The platform drops the
+  highlights that no longer apply only when the whole highlighting
+  session ends, after that pass. `ErrorLensDaemonListener`
+  (`DaemonCodeAnalyzer.DaemonListener.daemonFinished`) re-reads the final
+  highlights then. Before 0.1.1 a fixed problem could keep its inline
+  hint: typing a missing `;` removed the error from the editor while
+  "`';' expected`" stayed at the end of the line.
 - **Off-EDT where the platform requires it.** `doCollectInformation`
   (reading `HighlightInfo`s) runs on a background thread, exactly like
   the platform's own `TextEditorHighlightingPass` contract requires --

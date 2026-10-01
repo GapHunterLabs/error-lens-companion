@@ -21,7 +21,7 @@ import java.awt.Rectangle
  * tests (see ErrorLensInlayManagerTest), but nobody has looked at the
  * actual pixels yet. See README.md "Known limitations".
  */
-class ErrorLensInlayRenderer(private val text: String) : EditorCustomElementRenderer {
+class ErrorLensInlayRenderer(val text: String) : EditorCustomElementRenderer {
 
     companion object {
         private const val LEFT_PADDING_PX = 12

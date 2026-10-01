@@ -1,17 +1,10 @@
 package dev.gaphunter.errorlenscompanion.highlight
 
 import com.intellij.codeHighlighting.TextEditorHighlightingPass
-import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerEx
-import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.editor.colors.EditorFontType
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
-import dev.gaphunter.errorlenscompanion.format.InlineTextFormatter
 import dev.gaphunter.errorlenscompanion.model.DiagnosticInfo
-import dev.gaphunter.errorlenscompanion.model.DiagnosticSeverity
-import dev.gaphunter.errorlenscompanion.render.ErrorLensInlayManager
-import dev.gaphunter.errorlenscompanion.select.LineDiagnosticSelector
 
 /**
  * Reads the highlight results the IDE's OWN inspection/annotator passes
@@ -19,7 +12,9 @@ import dev.gaphunter.errorlenscompanion.select.LineDiagnosticSelector
  * itself, it only reads [DaemonCodeAnalyzerEx.processHighlights] after
  * those passes finish (registered to run after `Pass.UPDATE_ALL`, see
  * [ErrorLensPassFactory]) -- and turns errors/warnings into end-of-line
- * inlays.
+ * inlays. This is the first paint; [ErrorLensDaemonListener] refreshes the
+ * hints once the whole highlighting session has finished (the platform
+ * drops obsolete highlights only then).
  *
  * [doCollectInformation] runs off the EDT (per the platform contract for
  * this class) and only reads immutable [com.intellij.codeInsight.daemon.impl.HighlightInfo]
@@ -34,39 +29,10 @@ class ErrorLensHighlightingPass(
     private var lineDiagnostics: List<DiagnosticInfo> = emptyList()
 
     override fun doCollectInformation(progress: ProgressIndicator) {
-        val document = editor.document
-        val collected = mutableListOf<DiagnosticInfo>()
-
-        DaemonCodeAnalyzerEx.processHighlights(
-            document,
-            myProject,
-            HighlightSeverity.WEAK_WARNING,
-            0,
-            document.textLength,
-        ) { info ->
-            val severity = DiagnosticSeverity.fromPlatformSeverity(info.severity)
-            val message = info.description
-            if (severity != null && !message.isNullOrBlank()) {
-                val lineNumber = document.getLineNumber(info.startOffset)
-                collected += DiagnosticInfo(
-                    severity = severity,
-                    message = message,
-                    lineNumber = lineNumber,
-                    lineEndOffset = document.getLineEndOffset(lineNumber),
-                )
-            }
-            true
-        }
-
-        lineDiagnostics = LineDiagnosticSelector.selectOnePerLine(collected)
+        lineDiagnostics = ErrorLensDiagnostics.collect(editor, myProject)
     }
 
     override fun doApplyInformationToEditor() {
-        // same font the renderer draws with: an icon it has no glyph for would show as a box
-        val font = editor.colorsScheme.getFont(EditorFontType.ITALIC)
-        val entries = lineDiagnostics.map { diagnostic ->
-            diagnostic.lineEndOffset to InlineTextFormatter.format(diagnostic) { icon -> font.canDisplayUpTo(icon) == -1 }
-        }
-        ErrorLensInlayManager.replaceInlays(editor, entries)
+        ErrorLensDiagnostics.apply(editor, lineDiagnostics)
     }
 }
