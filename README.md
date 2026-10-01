@@ -5,6 +5,12 @@ the line that has them, instead of only as a gutter icon or a squiggly
 underline you have to hover to read. One hint per line (most severe
 diagnostic wins) so it never turns into unreadable clutter.
 
+![Error Lens Companion: errors and warnings written at the end of the line, no hovering](docs/media/hero.gif)
+
+Each feature on its own:
+[Inline diagnostics](docs/media/01-inline.gif) ·
+[Any language](docs/media/02-json.gif)
+
 ## Why it exists
 
 Ports the "Error Lens" concept -- VS Code's Error Lens extension has
