@@ -51,8 +51,12 @@ Confirmed in a real `runIde` sandbox, not just automated tests: real
 inline hints render correctly at the end of the line for JSON syntax
 errors (no SDK needed) and for real Java diagnostics (unresolved
 symbol, unused import, unused method, unused local variable, syntax
-error) once a JDK was available -- readable, correctly positioned, icon
-+ message both legible against the default dark theme. Also confirmed
+error) once a JDK was available -- readable and correctly positioned
+against the default dark theme. (Correction, 2026-10-01: the error icon
+was NOT legible -- "✖" has no glyph in JetBrains Mono, the default
+editor font, so every inline error started with an empty box. Since
+0.1.1 each icon is checked against the editor font and replaced by a
+Latin-1 fallback, `×` `!` `i`, when the font can't draw it.) Also confirmed
 live that a line with TWO unresolved symbols on it still shows exactly
 ONE inline hint, not two overlapping ones (`LineDiagnosticSelector`
 working as designed against real `HighlightInfo` data, not just the

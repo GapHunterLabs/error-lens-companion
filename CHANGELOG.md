@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+## [0.1.1]
+
+### Fixed
+
+- Every inline error started with an empty box: the error icon "✖" has
+  no glyph in JetBrains Mono, the default editor font. Each icon is now
+  checked against the editor font, with a fallback (`×`, `!`, `i`) when
+  the font can't draw it.
+
 ## [0.1.0]
 
 ### Added
@@ -25,5 +34,6 @@
   holds against real `HighlightInfo` data, not just unit-test DTOs.
   0 bugs found. See README.md "Live verification".
 
-[Unreleased]: https://github.com/GapHunterLabs/error-lens-companion/compare/0.1.0...HEAD
+[Unreleased]: https://github.com/GapHunterLabs/error-lens-companion/compare/0.1.1...HEAD
+[0.1.1]: https://github.com/GapHunterLabs/error-lens-companion/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/GapHunterLabs/error-lens-companion/commits/0.1.0

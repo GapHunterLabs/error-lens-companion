@@ -4,6 +4,7 @@ import com.intellij.codeHighlighting.TextEditorHighlightingPass
 import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerEx
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.editor.colors.EditorFontType
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
 import dev.gaphunter.errorlenscompanion.format.InlineTextFormatter
@@ -61,7 +62,11 @@ class ErrorLensHighlightingPass(
     }
 
     override fun doApplyInformationToEditor() {
-        val entries = lineDiagnostics.map { it.lineEndOffset to InlineTextFormatter.format(it) }
+        // same font the renderer draws with: an icon it has no glyph for would show as a box
+        val font = editor.colorsScheme.getFont(EditorFontType.ITALIC)
+        val entries = lineDiagnostics.map { diagnostic ->
+            diagnostic.lineEndOffset to InlineTextFormatter.format(diagnostic) { icon -> font.canDisplayUpTo(icon) == -1 }
+        }
         ErrorLensInlayManager.replaceInlays(editor, entries)
     }
 }
