@@ -12,10 +12,15 @@ import com.intellij.lang.annotation.HighlightSeverity
  * [dev.gaphunter.errorlenscompanion.format.InlineTextFormatter] testable
  * with plain JUnit, no IDE/project boot required.
  */
-enum class DiagnosticSeverity(val icon: String, val weight: Int) {
-    ERROR("✖", 3),
-    WARNING("⚠", 2),
-    WEAK_WARNING("ℹ", 1),
+enum class DiagnosticSeverity(val icon: String, val weight: Int, val fallbackIcon: String) {
+    // fallbackIcon: Latin-1, present in practically every editor font. The
+    // inline text is drawn with the editor's own font, and Java2D draws a
+    // glyph that font lacks as an empty box -- JetBrains Mono, the default
+    // editor font, has no "✖" (seen 2026-10-01: every inline error started
+    // with a box).
+    ERROR("✖", 3, "×"),
+    WARNING("⚠", 2, "!"),
+    WEAK_WARNING("ℹ", 1, "i"),
     ;
 
     companion object {

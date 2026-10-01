@@ -54,4 +54,28 @@ class InlineTextFormatterTest {
         val text = InlineTextFormatter.format(diagnostic(DiagnosticSeverity.ERROR, "short"))
         assertEquals("✖ short", text)
     }
+
+    // Regression (2026-10-01): the editor font (JetBrains Mono by default)
+    // has no "✖", and every inline error started with an empty box.
+    @Test
+    fun testIconTheFontCannotDisplayIsReplacedByItsFallback() {
+        val noDingbats: (String) -> Boolean = { icon -> icon != "✖" }
+        assertEquals("× cannot resolve symbol 'x'", InlineTextFormatter.format(diagnostic(DiagnosticSeverity.ERROR, "cannot resolve symbol 'x'"), noDingbats))
+        assertEquals("⚠ unused import", InlineTextFormatter.format(diagnostic(DiagnosticSeverity.WARNING, "unused import"), noDingbats))
+    }
+
+    @Test
+    fun testFallbackIconsAreLatin1SoAnyEditorFontHasThem() {
+        for (severity in DiagnosticSeverity.entries) {
+            assertTrue("${severity.name}: ${severity.fallbackIcon}", severity.fallbackIcon.all { it.code < 256 })
+        }
+    }
+
+    @Test
+    fun testFallbackIsCheckedAgainstARealFont() {
+        val font = java.awt.Font(java.awt.Font.MONOSPACED, java.awt.Font.ITALIC, 14)
+        val text = InlineTextFormatter.format(diagnostic(DiagnosticSeverity.ERROR, "x")) { icon -> font.canDisplayUpTo(icon) == -1 }
+        val icon = text.substringBefore(' ')
+        assertEquals("The chosen icon must be drawable with the font: $icon", -1, font.canDisplayUpTo(icon))
+    }
 }
