@@ -12,7 +12,8 @@
         computed, it never re-analyzes anything itself.</p>
         <p>Reads only already-finished <code>HighlightInfo</code> results
         from a pass registered to run after the IDE's own general
-        highlighting pass -- no duplicate analysis, no network call, no
+        highlighting pass, and refreshes them once the IDE has finished
+        highlighting the file -- no duplicate analysis, no network call, no
         telemetry. One hint per line (the most severe diagnostic wins),
         so it never turns into unreadable clutter on a line with several
         problems.</p>
@@ -23,4 +24,9 @@
     <extensions defaultExtensionNs="com.intellij">
         <highlightingPassFactory implementation="dev.gaphunter.errorlenscompanion.highlight.ErrorLensPassFactory"/>
     </extensions>
+
+    <projectListeners>
+        <listener class="dev.gaphunter.errorlenscompanion.highlight.ErrorLensDaemonListener"
+                  topic="com.intellij.codeInsight.daemon.DaemonCodeAnalyzer$DaemonListener"/>
+    </projectListeners>
 </idea-plugin>

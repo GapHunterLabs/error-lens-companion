@@ -12,6 +12,10 @@
   no glyph in JetBrains Mono, the default editor font. Each icon is now
   checked against the editor font, with a fallback (`×`, `!`, `i`) when
   the font can't draw it.
+- A fixed problem could keep its inline hint (typing a missing `;` left
+  "`';' expected`" at the end of the line): the hints were read before
+  the IDE dropped obsolete highlights. They are now refreshed once
+  highlighting of the file has finished.
 
 ## [0.1.0]
 
