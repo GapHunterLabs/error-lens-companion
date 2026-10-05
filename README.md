@@ -84,10 +84,12 @@ Automatic -- open any file the IDE already highlights errors/warnings
 in, and matching lines get an inline hint at the end of the line. No
 action to trigger, no configuration yet.
 
-## Enterprise / Team Licensing
+## Support
 
-Need enterprise features, custom rules, or team licensing? Contact us at
-**gaphunterlabs@gmail.com**.
+- **Bugs and feature requests:** [GitHub Issues](https://github.com/GapHunterLabs/error-lens-companion/issues)
+- **Questions, or custom rules for a team's codebase:** **gaphunterlabs@gmail.com**
+- **Security vulnerabilities:** report privately as described in [SECURITY.md](SECURITY.md), not in a public issue.
+- **Privacy and network behavior:** [PRIVACY.md](PRIVACY.md)
 
 ## Development
 
